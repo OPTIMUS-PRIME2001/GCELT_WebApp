@@ -158,7 +158,7 @@ export async function PATCH(
                 resume: SocialLinks.Resume,
             },
             where: {
-                studentId: studentId,
+                id: studentId,
             }
         })
 

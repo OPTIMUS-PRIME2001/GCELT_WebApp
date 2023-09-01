@@ -84,7 +84,7 @@ export default async function getNotVerifiedUser(
             NotVerifiedStudent.map(async (studentCard) => {
               const mySocialLinks = await prisma.socialLinks.findUnique({
                 where: {
-                  studentId: studentCard.id,
+                  id: studentCard.id,
                 },
               });         
       

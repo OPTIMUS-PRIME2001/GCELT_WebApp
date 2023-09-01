@@ -73,8 +73,7 @@ model StudentCard {
 }
 
 model SocialLinks {
-  id              String @id  @default(auto()) @map("_id") @db.ObjectId
-  studentId       String @db.ObjectId @unique
+  id              String @id @map("_id") @db.ObjectId
   linkedInLink    String?
   githubLink      String?
   leetCodeLink    String?
@@ -83,7 +82,7 @@ model SocialLinks {
   twitterLink     String?
   resume          String?
 
-  student StudentCard @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  student StudentCard @relation(fields: [id], references: [id], onDelete: Cascade)
 }
 
 model TeacherCard {

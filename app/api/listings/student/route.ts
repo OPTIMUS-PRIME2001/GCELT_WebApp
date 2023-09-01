@@ -56,7 +56,7 @@ export async function POST(request: Request) {
     // Now insert into database table RegisteredCard as a new student and pass the retrieved details
     await prisma.socialLinks.create({
         data: {
-            studentId: currentUser.id,
+            id: currentUser.id,
             linkedInLink:SocialLinks.LinkedInLink,
             githubLink: SocialLinks.GitHubLink,
             leetCodeLink:SocialLinks.LeetCodeLink,

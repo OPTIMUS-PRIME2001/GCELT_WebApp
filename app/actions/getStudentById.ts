@@ -18,7 +18,7 @@ export default async function getStudentById(
         }
         const mySocialLinks = await prisma.socialLinks.findUnique({
             where: {
-                studentId: studentId,
+                id: studentId,
             }
         });
 

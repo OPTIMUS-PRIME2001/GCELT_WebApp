@@ -86,7 +86,7 @@ export default async function getVerifiedStudents(
       studentlist.map(async (studentCard) => {
         const mySocialLinks = await prisma.socialLinks.findUnique({
           where: {
-            studentId: studentCard.id,
+            id: studentCard.id,
           },
         });
     
