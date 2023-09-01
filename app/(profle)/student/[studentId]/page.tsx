@@ -6,6 +6,7 @@ import ClientOnly from "@/app/components/ClientOnly";
 import EmptyState from "@/app/components/EmptyState";
 
 import ProfileClient from "./ProfileClient";
+import { SafeStudent } from "@/app/types";
 
 interface IParams {
   studentId?: string;
@@ -13,7 +14,7 @@ interface IParams {
 
 const ProfilePage = async ({ params }: { params: IParams }) => {
 
-  const listing = await getStudentById(params);
+  const listing = await getStudentById(params) as SafeStudent;
   const currentUser = await getCurrentUser();
 
   if (!listing) {

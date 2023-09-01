@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 // Global imports
 import { redirect } from "next/navigation";
 

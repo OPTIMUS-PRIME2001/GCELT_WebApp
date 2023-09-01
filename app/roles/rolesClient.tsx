@@ -1,11 +1,8 @@
 "use client";
 
-import { toast } from "react-hot-toast";
-import axios from "axios";
-import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { SafeListing, SafeUser } from "@/app/types";
+import { SafeUser } from "@/app/types";
 
 import Heading from "@/app/components/ui/Heading";
 import Container from "@/app/components/Container";
