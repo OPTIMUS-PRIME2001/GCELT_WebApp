@@ -17,6 +17,7 @@ import Filter from "@/app/components/customUi/filter/Filter";
 import getVerifiedStudents, { VerifiedListingParams } from "@/app/actions/getVerifiedStudents";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import getStudentById from "./actions/getStudentById";
+import { useEffect } from "react";
 
 
 
@@ -36,20 +37,26 @@ const Home = async ({ searchParams }: HomeProps) => {
             </ClientOnly>
         );
     }
-
-    // if(!(await getStudentById(currentUser?.id)) ){
-    //     redirect('/register');
-    // }    
-
-    //To check the url's storeid if present inside datanase and if present then fetch it
+     //To check the url's storeid if present inside datanase and if present then fetch it
     const s = await prisma.studentCard.findFirst({
         where: {
             id: currentUser?.id,
         }
     })
-    if (currentUser && !s && currentUser.role !== 'admin') {
+    const t = await prisma.teacherCard.findFirst({
+        where: {
+            id: currentUser?.id,
+        }
+    })
+    console.log(s,t,!s,!t);
+    if (currentUser && !(s || t) && currentUser.role !== 'admin') {
         redirect(`/register`);
     }
+    // useEffect(() => {
+    //     if (session?.status === 'authenticated') {
+    //         router.push('/');
+    //     }
+    // }, [session?.status, router]);
 
     const Profile = students.filter((my) => { return (my.id === currentUser?.id) });
     const other = students.filter((item) => { return (item.id !== currentUser?.id) });

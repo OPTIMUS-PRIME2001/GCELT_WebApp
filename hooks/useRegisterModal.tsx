@@ -1,14 +1,17 @@
 // control open and close of register modals
 import { create } from 'zustand';
+type Variant = 'LOGIN' | 'REGISTER';
 
 interface RegisterModalStore {
   isOpen: boolean;
-  onOpen: () => void;
+  variant: Variant;
+  onOpen: (variant: string | any) => void;
   onClose: () => void;
 }
 
 export const useRegisterModal = create<RegisterModalStore>((set) => ({
   isOpen: false,
-  onOpen: () => set({ isOpen: true }),
+  variant: 'LOGIN',
+  onOpen: (variant) => set({ isOpen: true, variant }),
   onClose: () => set({ isOpen: false })
 }));

@@ -15,6 +15,7 @@ import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 //types
 import { SafeUser } from "@/app/types";
+import { getFirstLettersOfWords } from "@/lib/getYear";
 // Components
 import { Checkbox } from "@/app/components/ui/checkbox";
 import { Button } from "@/app/components/ui/button";
@@ -57,7 +58,7 @@ export const columns: ColumnDef<SafeUser>[] = [
         ),
         cell: ({ row }) => <span className="max-w-12"><Avatar className="h-8 w-8">
             <AvatarImage src={row.getValue("image") || '/avatars/01.png'} alt="@shadcn" />
-            <AvatarFallback>SC</AvatarFallback>
+            <AvatarFallback>{getFirstLettersOfWords(row.getValue("name"))}</AvatarFallback>
         </Avatar></span>,
         enableSorting: false,
         enableHiding: false,

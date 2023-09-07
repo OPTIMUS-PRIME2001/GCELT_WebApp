@@ -43,6 +43,7 @@ import { ThemeModeToggle } from "@/app/components/customUi/themeToggler";
 import { SafeUser } from "@/app/types";
 import { useRegisterModal } from "@/hooks/useRegisterModal";
 import { useGenerate } from "@/hooks/useGenerate";
+import { getFirstLettersOfWords } from "@/lib/getYear";
 
 
 interface UserMenuProps {
@@ -104,7 +105,7 @@ export default function UserMenu({ currentUser }: UserMenuProps) {
                             {currentUser ? (
                                 <Avatar className="h-8 w-8">
                                     <AvatarImage src={currentUser?.image || '/avatars/01.png'} alt="@shadcn" />
-                                    <AvatarFallback className="bg-green-600  text-white ">SC</AvatarFallback>
+                                    <AvatarFallback className="bg-green-600  text-white ">{getFirstLettersOfWords(currentUser?.name? currentUser.name: "A")}</AvatarFallback>
                                 </Avatar>
                             ) : (<div className="mr-2">Login</div>)
                             }
@@ -117,7 +118,7 @@ export default function UserMenu({ currentUser }: UserMenuProps) {
                                 <div className="flex flex-row space-x-2">
                                     <Avatar className="h-8 w-8">
                                         <AvatarImage src={currentUser?.image || '/avatars/01.png'} alt="@shadcn" />
-                                        <AvatarFallback>SC</AvatarFallback>
+                                        <AvatarFallback>{getFirstLettersOfWords(currentUser?.name? currentUser.name: "A")}</AvatarFallback>
                                     </Avatar>
                                     <div className="flex flex-col space-y-1">
                                         <p className="text-sm font-medium leading-none">{currentUser?.name}</p>
@@ -179,12 +180,12 @@ export default function UserMenu({ currentUser }: UserMenuProps) {
                                 </>
                             ) : (
                                 <>
-                                    <DropdownMenuItem onClick={registerModal.onOpen}>
+                                    <DropdownMenuItem onClick={() => registerModal.onOpen('LOGIN')}>
                                         <LogIn className="mr-2 h-4 w-4" />
                                         LogIn
                                     </DropdownMenuItem>
 
-                                    <DropdownMenuItem onClick={() => { signOut() }}>
+                                    <DropdownMenuItem onClick={() => registerModal.onOpen('REGISTER')}>
                                         <UserPlus2 className="mr-2 h-4 w-4" />
                                         SignUp
                                     </DropdownMenuItem></>

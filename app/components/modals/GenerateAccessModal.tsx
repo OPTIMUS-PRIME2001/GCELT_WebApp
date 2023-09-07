@@ -38,24 +38,28 @@ const GenerateAccessModal = () => {
     const router = useRouter();
 
     //All States Controller
-    const [data, setData] = useState<any>([]);   
+    const [data, setData] = useState<any>([]);
     // state to control Loading condition  , disable trigger when so submission take place
-    const [isLoading, setIsLoading] = useState<Boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     // state to control is copied icon visibility   
     const [copied, setCopied] = useState(false);
     //state to control children/ text to be 
-    const [children, _] = useState<string>(accessModal.accessCode);
-    
+    const [children, setChildren] = useState<string>(accessModal.accessCode);
+
+    // Use useEffect to update `vari` when `registerModal.variant` changes
+    useEffect(() => {
+        setChildren(accessModal.accessCode);
+    }, [accessModal.accessCode]);
+
+
     //TODO:  Need to correct here
     const handleCopyToClipboard = () => {
-        console.log("children:",children);
-        
-        // navigator.clipboard.writeText(children);
-        navigator.clipboard.writeText(accessModal.accessCode);
+        navigator.clipboard.writeText(children);
+        // navigator.clipboard.writeText(accessModal.accessCode);
         setCopied(true);
     };
 
-    
+
     // useform function provided by react-hook-form
     const form = useForm<z.infer<typeof accessCodeSchema>>({
         resolver: zodResolver(accessCodeSchema),
@@ -69,23 +73,23 @@ const GenerateAccessModal = () => {
         setIsLoading(true);
 
         const result = await axios.patch('/api/refferalcode', data)
-        .then(() => {
-            toast.success('Role Upgraded to Teacher!');
-            router.refresh();
-            form.reset();
-        })
-        .catch(() => {
-            toast.error('Something went wrong.');
-        })
-        .finally(() => {
-            setIsLoading(false);
-        })
+            .then(() => {
+                toast.success('Role Upgraded to Teacher!');
+                router.refresh();
+                form.reset();
+            })
+            .catch(() => {
+                toast.error('Something went wrong.');
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
 
 
     }
 
 
-    return isLoading ? <h1>Ruko zara sabr karo...</h1> : (
+    return (
 
         <Modal
             title="Access Code"

@@ -56,21 +56,26 @@ const LogInModal = () => {
     // router from next navigation to push routes path 
     const router = useRouter();
     // state to control variant of form
-    const [variant, setvariant] = useState<Variant>('LOGIN');
+    const [variant, setvariant] = useState<Variant>(registerModal.variant);
     // state to control Loading condition  , disable trigger when so submission take place
     const [isLoading, setIsLoading] = useState(false);
 
-
+    // Use useEffect to update `variant` when `registerModal.variant` changes
     // if we authenticated to our session then show main page or stay in current page of login
-    // useEffect(() => {
-    //     if (session?.status === 'authenticated') {
-    //         router.push('/')
-    //     }
-    // }, [session?.status, router]);
+    useEffect(() => {
+        if (session?.status === 'authenticated') {
+            toast.success('LoggedIn!');
+            router.push('/register')
+        }
+        else{
+            router.push('/') 
+        }
+        setvariant(registerModal.variant);
+    }, [session?.status, router, registerModal.variant]);
 
     // Function to toggle between variant of Login and Register card
     const toggleVariant = useCallback(() => {
-        if (variant === 'LOGIN') {
+        if (variant === 'LOGIN' ) {
             setvariant('REGISTER');
         } else {
             setvariant('LOGIN');
@@ -98,17 +103,15 @@ const LogInModal = () => {
 
         if (variant === 'LOGIN') {
             //NextAuth SignIN
-            console.log('Inside Login')
             signIn('credentials', {
                 ...data,
                 redirect: false,
             })
                 .then((callback) => {
                     if (callback?.ok) {
-                        toast.success('Logged in');
                         //To check the url's storeid if present inside datanase and if present then fetch it
                         registerModal.onClose();                        
-                        router.refresh() 
+                        router.push('/register');
                     }
 
                     if (callback?.error) {

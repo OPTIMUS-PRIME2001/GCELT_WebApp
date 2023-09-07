@@ -82,7 +82,7 @@ const studentRegistration = z.object({
         Resume: z.string().url().optional(),
     }),
     About: z.string().optional(),
-    carrer_status: z.enum(carrerOptions),
+    carrer_status: z.enum(carrerOptions).optional(),
     higher_study_degree: z.string().optional(),
     university: z.string().optional(),
     job_title: z.string().optional(),
