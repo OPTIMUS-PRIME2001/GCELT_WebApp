@@ -136,10 +136,10 @@ export default function UserMenu({ currentUser }: UserMenuProps) {
                             <DropdownMenuItem onClick={() => router.push('/faculty')}>
                                 <PiChalkboardTeacherDuotone className="mr-2 h-5 w-5" /> Faculty
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => router.push('/roles')}>
+                            <DropdownMenuItem onClick={() => router.push('/routine')}>
                                 <CalendarCheck className="mr-2 h-4 w-4" /> Routine
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => router.push('/roles')}>
+                            <DropdownMenuItem onClick={() => router.push('/exams')}>
                                 <PiExamDuotone className="mr-2 h-5 w-5" /> Exams
                             </DropdownMenuItem>
 

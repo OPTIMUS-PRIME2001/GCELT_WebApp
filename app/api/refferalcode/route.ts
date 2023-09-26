@@ -50,9 +50,9 @@ export async function PATCH(
             }
             else {
                 // console.log('insideelse')
-                let userslist = [...(matchedCode.users || [])];
-                userslist.push(currentUser.id+'-'+matchedCode.accessCode);
-                console.log(userslist);
+                // let userslist = [...(matchedCode.users || [])];
+                // userslist.push(currentUser.id+'-'+matchedCode.accessCode);
+                // console.log(userslist);
 
                 // const use = await prismadb.referralCode.update({
                 //     data: {

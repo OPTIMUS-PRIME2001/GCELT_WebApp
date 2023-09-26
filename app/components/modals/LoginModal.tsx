@@ -63,7 +63,7 @@ const LogInModal = () => {
     // Use useEffect to update `variant` when `registerModal.variant` changes
     // if we authenticated to our session then show main page or stay in current page of login
     useEffect(() => {
-        if (session?.status === 'authenticated') {
+        if (session?.status === "authenticated") {
             toast.success('LoggedIn!');
             router.push('/register')
         }

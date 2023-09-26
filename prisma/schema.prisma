@@ -6,12 +6,12 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+  relationMode = "prisma"
 }
-
 model User {
-  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  id              String @id @default(uuid())
   role            String? @default("student")
   name            String?
   email           String?   @unique
@@ -20,35 +20,36 @@ model User {
   hashedPassword  String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  favoriteIds     String[] @db.ObjectId
+  // favoriteIds     String[] @db.ObjectId
 
-  accounts Account[]
-  students StudentCard[]
-  teachers TeacherCard[]
-  refferals  ReferralCode[]
+  accounts Account[] @relation("Social Accounts")
+  students StudentCard[] @relation("Student Card")
+  teachers TeacherCard[] @relation("Teacher Accounts")
+  refferals  ReferralCode[] @relation("Access Code Accounts")
 }
 
 model Account {
-  id                 String @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String   @db.ObjectId
+  id                 String @id @default(uuid())
+  userId             String 
   type               String
   provider           String
   providerAccountId  String
-  refresh_token      String?  @db.String
-  access_token       String?  @db.String
+  refresh_token      String?  @db.LongText
+  access_token       String?  @db.LongText
   expires_at         Int?
   token_type         String?
   scope              String?
-  id_token           String?  @db.String
+  id_token           String?  @db.LongText
   session_state      String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation("Social Accounts",fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model StudentCard {
-  id              String @id @map("_id") @db.ObjectId
+  id              String @id @map("_id")
   role            String @default("student")
   Name            String
   email           String
@@ -61,7 +62,7 @@ model StudentCard {
   Program         String
   Stream          String
   About           String?
-  socialLinks     SocialLinks?
+  socialLinks     SocialLinks? @relation("SocialLinks")
   carrer_status  String?
   higher_study_degree String?
   university     String?
@@ -69,11 +70,12 @@ model StudentCard {
   company        String?
   industry       String?
 
-  user User @relation(fields: [id], references: [id], onDelete: Cascade)
+  user User @relation("Student Card",fields: [id], references: [id], onDelete: Cascade)
+  @@index([id])
 }
 
 model SocialLinks {
-  id              String @id @map("_id") @db.ObjectId
+  id              String @id @map("_id")
   linkedInLink    String?
   githubLink      String?
   leetCodeLink    String?
@@ -82,11 +84,12 @@ model SocialLinks {
   twitterLink     String?
   resume          String?
 
-  student StudentCard @relation(fields: [id], references: [id], onDelete: Cascade)
+  student StudentCard @relation("SocialLinks",fields: [id], references: [id], onDelete: Cascade)
+  @@index([id])
 }
 
 model TeacherCard {
-  id             String @id  @map("_id") @db.ObjectId
+  id             String @id  @map("_id")
   role            String  @default("faculty")
   Name            String
   email           String
@@ -101,15 +104,126 @@ model TeacherCard {
   resumeurl       String
   verified        Boolean  @default(false)
 
-  user User @relation(fields: [id], references: [id], onDelete: Cascade)
+  user User @relation("Teacher Accounts", fields: [id], references: [id], onDelete: Cascade)
+  @@index([id])
 }
 
 model ReferralCode {
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  id              String    @id @default(uuid())
   accessCode      String    @unique
-  createdBy       String    @db.ObjectId
+  createdBy       String    
   createdAt       DateTime  @updatedAt
   codeExpiration  DateTime
-  users           String[]  @db.ObjectId
-  user User @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  // users           String[]  
+  user User @relation("Access Code Accounts",fields: [createdBy], references: [id], onDelete: Cascade)
+  @@index([createdBy])
 }
+
+// datasource db {
+//   provider = "mongodb"
+//   url      = env("DATABASE_URL")
+// }
+
+// model User {
+//   id              String @id @default(auto()) @map("_id") @db.ObjectId
+//   role            String? @default("student")
+//   name            String?
+//   email           String?   @unique
+//   emailVerified   DateTime?
+//   image           String?  
+//   hashedPassword  String?
+//   createdAt       DateTime @default(now())
+//   updatedAt       DateTime @updatedAt
+//   favoriteIds     String[] @db.ObjectId
+
+//   accounts Account[]
+//   students StudentCard[]
+//   teachers TeacherCard[]
+//   refferals  ReferralCode[]
+// }
+
+// model Account {
+//   id                 String @id @default(auto()) @map("_id") @db.ObjectId
+//   userId             String   @db.ObjectId
+//   type               String
+//   provider           String
+//   providerAccountId  String
+//   refresh_token      String?  @db.String
+//   access_token       String?  @db.String
+//   expires_at         Int?
+//   token_type         String?
+//   scope              String?
+//   id_token           String?  @db.String
+//   session_state      String?
+
+//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+//   @@unique([provider, providerAccountId])
+// }
+
+// model StudentCard {
+//   id              String @id @map("_id") @db.ObjectId
+//   role            String @default("student")
+//   Name            String
+//   email           String
+//   imageSrc        String
+//   Year            Int
+//   createdAt       DateTime @default(now())
+//   verified        Boolean  @default(false)
+//   RollNo          String?
+//   RegistrationNo  String?  
+//   Program         String
+//   Stream          String
+//   About           String?
+//   socialLinks     SocialLinks?
+//   carrer_status  String?
+//   higher_study_degree String?
+//   university     String?
+//   job_title      String?
+//   company        String?
+//   industry       String?
+
+//   user User @relation(fields: [id], references: [id], onDelete: Cascade)
+// }
+
+// model SocialLinks {
+//   id              String @id @map("_id") @db.ObjectId
+//   linkedInLink    String?
+//   githubLink      String?
+//   leetCodeLink    String?
+//   mediumLink      String?
+//   phoneNum        String?
+//   twitterLink     String?
+//   resume          String?
+
+//   student StudentCard @relation(fields: [id], references: [id], onDelete: Cascade)
+// }
+
+// model TeacherCard {
+//   id             String @id  @map("_id") @db.ObjectId
+//   role            String  @default("faculty")
+//   Name            String
+//   email           String
+//   imageSrc        String
+//   createdAt       DateTime @default(now())
+//   Year            Int                  
+//   Department      String
+//   Designation     String
+//   Qualification   String
+//   Specialization  String
+//   linkedInurl     String
+//   resumeurl       String
+//   verified        Boolean  @default(false)
+
+//   user User @relation(fields: [id], references: [id], onDelete: Cascade)
+// }
+
+// model ReferralCode {
+//   id              String    @id @default(auto()) @map("_id") @db.ObjectId
+//   accessCode      String    @unique
+//   createdBy       String    @db.ObjectId
+//   createdAt       DateTime  @updatedAt
+//   codeExpiration  DateTime
+//   users           String[]  @db.ObjectId
+//   user User @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+// }
